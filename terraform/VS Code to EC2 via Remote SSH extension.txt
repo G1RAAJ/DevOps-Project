@@ -1,0 +1,40 @@
+Step 1: Launch EC2 (Amazon Linux)
+
+Amazon EC2
+Choose Amazon Linux 2023
+Open port 22 (SSH)
+Download key pair (.pem)
+
+Step 2: Install Terraform on EC2
+
+SSH into EC2:
+-------------
+ssh -i mykey.pem ec2-user@<public-ip>
+
+install terraform
+-----------------
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+
+terraform version
+
+Step 3: Install VS Code Extension
+Install:
+Remote - SSH
+
+Step 4: Connect VS Code to EC2
+Press Ctrl + Shift + P
+Type: 
+Remote-SSH: Connect to Host
+Add new SSH host:
+ssh -i /path/to/mykey.pem ec2-user@<public-ip>
+
+Step 5: Create Terraform Project on EC2
+mkdir terraform-project
+cd terraform-project
+
+vi main.tf
+
+terrafrom fmt, validate, plan, apply
+

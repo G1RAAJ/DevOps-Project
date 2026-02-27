@@ -1,0 +1,12 @@
+ecs-fargate-terraform/
+│
+├── provider.tf
+├── var.tf
+├── vpc.tf
+├── sg.tf
+├── alb.tf
+├── iam.tf
+├── ecs.tf
+├── asg.tf
+├── outputs.tf
+
