@@ -1,9 +1,7 @@
-
-
 terraform {
   backend "s3" {
-    bucket = "amzn-ec2-eks"
-    key = "eks/ngg_cluster_name/statefile"
+    bucket = "my-terraform-state-bucket"
+    key    = "eks/terraform.tfstate"
     region = "us-east-1"
   }
-} 
+}
