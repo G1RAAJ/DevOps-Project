@@ -11,12 +11,6 @@ terraform {
       version = "~> 3.0"
     }
   }
-
-  backend "s3" {
-    bucket = "amzn-ec2-eks"   # CHANGE
-    key    = "eks/terraform.tfstate"
-    region = "us-east-1"
-  }
 }
 
 provider "aws" {
