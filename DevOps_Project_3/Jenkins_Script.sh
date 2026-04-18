@@ -1,40 +1,32 @@
 #!/bin/bash
-set -ex
+set -euo pipefail
+set -x
 
+export TF_VAR_region="${REGION}"
+export TF_VAR_vpc_id="${VPC_ID}"
+export TF_VAR_cluster_name="${CLUSTER_NAME}"
 
-export TF_VAR_region=$REGION
-export TF_VAR_vpc_id=$VPC_ID
-export TF_VAR_cluster_name=$CLUSTER_NAME
-
-#goint to the terraform path
 cd ${WORKSPACE}/DevOps_Project_3/Terraform
 
-#replacing the cluster name field in backend.tf file
-sed -i "s/ngg_cluster_name/$CLUSTER_NAME/g" backend.tf
-
-#running terraform command
-terraform init    
+terraform init -upgrade
 terraform plan
-terraform $ACTION --auto-approve
+terraform ${ACTION} -auto-approve
 
-if [ $ACTION == "apply" ]; then
-#login into the eks cluster
-aws eks update-kubeconfig --name $CLUSTER_NAME --region $REGION
-kubectl get pods -A
+if [ "${ACTION}" = "apply" ]; then
 
-#installing bitnami helm chart
-helm repo add bitnami https://charts.bitnami.com/bitnami
+  aws eks update-kubeconfig --name ${CLUSTER_NAME} --region ${REGION}
 
-#installing eks helm chart
-helm repo add eks https://aws.github.io/eks-charts
+  kubectl get nodes
 
-#installing nginx
-helm upgrade --install nginx bitnami/nginx
+  helm repo add bitnami https://charts.bitnami.com/bitnami || true
+  helm repo update
 
-#installing aws loadbalancer controller
-helm upgrade --install lb-controller eks/aws-load-balancer-controller --set clusterName=$CLUSTER_NAME
+  kubectl create namespace nginx || true
 
+  helm upgrade --install nginx bitnami/nginx -n nginx
+
+  kubectl get svc -n nginx
 
 else
-echo "no need to install"
+  echo "Destroy completed"
 fi
