@@ -8,7 +8,7 @@ export TF_VAR_cluster_name="${CLUSTER_NAME}"
 
 cd ${WORKSPACE}/DevOps_Project_3/Terraform
 
-terraform init -upgrade
+terraform init -reconfigure
 terraform plan
 terraform ${ACTION} -auto-approve
 
